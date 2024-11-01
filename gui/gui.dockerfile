@@ -1,5 +1,5 @@
 # Dockerfile for the React app
-FROM node:13.12.0-alpine AS build
+FROM node:20-alpine AS build
 
 # Set the working directory
 WORKDIR /app
@@ -22,7 +22,7 @@ COPY / ./
 RUN npm run build
 
 # Use a lightweight server to serve the app
-FROM node:alpine
+FROM node:20-alpine
 
 WORKDIR /app
 

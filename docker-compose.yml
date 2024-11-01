@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: api.dockerfile # Ensure this is the correct Dockerfile name in the `api` directory
+    ports:
+      - "5001:80" # Expose .NET API on port 5000 internally, accessible at http://localhost/api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+  gui:
+    build:
+      context: ./gui
+      dockerfile: gui.dockerfile # Specify the Dockerfile for the React project
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:80" # Expose GUI on port 3000
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Mount the custom Nginx configuration
+    ports:
+      - 80:80
+    depends_on:
+      - api
+      - gui
+  ngrok:
+    build:
+      context: .
+      dockerfile: ngrok.dockerfile
+    command: http --domain=relative-only-husky.ngrok-free.app nginx:80
+    environment:
+      NGROK_AUTHTOKEN: 2jAp4ZvP3OMPYLDrEw54jUHewOY_4CZqrrAGvf5ai8AQ6Anrm
+    ports:
+      - "4040:4040"

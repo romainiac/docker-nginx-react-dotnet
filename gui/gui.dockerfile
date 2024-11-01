@@ -1,5 +1,5 @@
 # Dockerfile for the React app
-FROM node:latest AS build
+FROM node:13.12.0-alpine AS build
 
 # Set the working directory
 WORKDIR /app
